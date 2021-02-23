@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     Logger.i("Response Code:%s",response.code());
                     if( response.isSuccessful() ) {
+                        Logger.i("Success fetch photo information , Thread:%s" , Thread.currentThread().getId());
                         Gson gson = new Gson();
                         ResponseBody responseBody = response.body();
                         if( responseBody != null ) {
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(@NotNull Call call, @NotNull Response response) {
                                     if (response.isSuccessful()) {
+                                        Logger.i("Success response  photo image resource , Thread:%s" , Thread.currentThread().getId());
                                         ResponseBody downloadBody = response.body();
                                         if (downloadBody != null) {
                                             InputStream inputStream = downloadBody.byteStream();
