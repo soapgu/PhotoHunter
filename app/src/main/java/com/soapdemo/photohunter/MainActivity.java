@@ -59,10 +59,8 @@ public class MainActivity extends AppCompatActivity {
                     if( response.isSuccessful() ) {
                         Logger.i("Success fetch photo information , Thread:%s" , Thread.currentThread().getId());
                         Gson gson = new Gson();
-                        ResponseBody responseBody = response.body();
-                        if( responseBody != null ) {
+                        try( ResponseBody responseBody = response.body() ) {
                             Photo photo = gson.fromJson(responseBody.string(), Photo.class);
-                            response.close();
                             runOnUiThread(() -> textView.setText(photo.alt_description));
 
                             Request imageRequest = new Request.Builder()
@@ -80,11 +78,9 @@ public class MainActivity extends AppCompatActivity {
                                 public void onResponse(@NotNull Call call, @NotNull Response response) {
                                     if (response.isSuccessful()) {
                                         Logger.i("Success response  photo image resource , Thread:%s" , Thread.currentThread().getId());
-                                        ResponseBody downloadBody = response.body();
-                                        if (downloadBody != null) {
+                                        try( ResponseBody downloadBody = response.body() ) {
                                             InputStream inputStream = downloadBody.byteStream();
                                             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                            response.close();
                                             runOnUiThread(() -> photoView.setImageBitmap(bitmap));
                                         }
                                     }
