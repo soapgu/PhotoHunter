@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">PhotoHunter</string>
     <string name="new_button_text">New</string>
+    <string name="image_desc">Home Photo</string>
 </resources>
