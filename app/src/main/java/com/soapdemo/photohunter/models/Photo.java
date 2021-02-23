@@ -5,4 +5,5 @@ public class Photo {
     public int width;
     public int height;
     public String alt_description;
+    public PhotoUrl urls;
 }
