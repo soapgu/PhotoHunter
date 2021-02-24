@@ -28,7 +28,7 @@ import okhttp3.ResponseBody;
 public class MainActivity extends AppCompatActivity {
 
     private String url = "https://api.unsplash.com/photos/random?client_id=ki5iNzD7hebsr-d8qUlEJIhG5wxGwikU71nsqj8PcMM";
-    private OkHttpClient client = new OkHttpClient();
+    private static OkHttpClient client = new OkHttpClient();
     TextView textView;
     ImageView photoView;
 
