@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
                                 output.write(data, 0, len);
                             }
                             output.flush();
+                            input.close();
                         }
                         Logger.i("----Success download photo image to cache---" );
                         Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
