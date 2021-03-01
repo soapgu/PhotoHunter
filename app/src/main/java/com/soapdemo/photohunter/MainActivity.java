@@ -16,6 +16,7 @@ import com.soapdemo.photohunter.models.Photo;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -55,79 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(() -> photoView.setImageBitmap(bitmap));
             }
         }
-        this.findViewById(R.id.new_button).setOnClickListener( v ->{
-            Request request = new Request.Builder()
-                    .url(url)
-                    .get()
-                    .build();
-            Call call = client.newCall(request);
-
-            call.enqueue(new Callback() {
-                @Override
-                public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    Logger.e("Get Photo Error:%s" , e.getMessage());
-                    runOnUiThread(() -> textView.setText("Error for Hunter Photo"));
-                }
-
-                @Override
-                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    Logger.i("Response Code:%s",response.code());
-                    if( response.isSuccessful() ) {
-                        Logger.i("Success fetch photo information , Thread:%s" , Thread.currentThread().getId());
-                        try( ResponseBody responseBody = response.body() ) {
-                            String jsonString = responseBody.string();
-                            Photo photo = gson.fromJson(jsonString, Photo.class);
-                            runOnUiThread(() -> textView.setText(photo.alt_description));
-
-                            Request imageRequest = new Request.Builder()
-                                    .url(photo.urls.small)
-                                    .get()
-                                    .build();
-                            Call downloadCall = client.newCall(imageRequest);
-                            downloadCall.enqueue(new Callback() {
-                                @Override
-                                public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                                    Logger.e("download image Error:%s", e.getMessage());
-                                }
-
-                                @Override
-                                public void onResponse(@NotNull Call call, @NotNull Response response) {
-                                    if (response.isSuccessful()) {
-                                        Logger.i("Success response  photo image resource , Thread:%s" , Thread.currentThread().getId());
-                                        FileOutputStream fos = null;
-                                        try( ResponseBody downloadBody = response.body() ) {
-                                            InputStream inputStream = downloadBody.byteStream();
-                                            byte[] buf = new byte[2048];
-                                            File file = new File(getExternalCacheDir(), String.format( "%s.jpg" ,photo.id ) );
-                                            fos = new FileOutputStream(file);
-                                            int len;
-                                            while ((len = inputStream.read(buf)) != -1) {
-                                                fos.write(buf, 0, len);
-                                            }
-                                            fos.flush();
-                                            Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
-                                            runOnUiThread(() -> photoView.setImageBitmap(bitmap));
-                                            currentPhotoJson = jsonString;
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        } finally {
-                                            if (fos != null) {
-                                                try {
-                                                    fos.close();
-                                                } catch (IOException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-            });
-            textView.setText( "Requesting..." );
-        } );
+        this.findViewById(R.id.new_button).setOnClickListener( v -> this.ChangeImageNow());
     }
 
     @Override
@@ -137,5 +66,82 @@ public class MainActivity extends AppCompatActivity {
             //Logger.i("Save Photo Json: %s", this.currentPhotoJson);
             outState.putString("Json", this.currentPhotoJson);
         }
+    }
+
+    private void ChangeImageNow()
+    {
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+        Call call = client.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Logger.e("Get Photo Error:%s" , e.getMessage());
+                runOnUiThread(() -> textView.setText("Error for Hunter Photo"));
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                Logger.i("Response Code:%s",response.code());
+                if( response.isSuccessful() ) {
+                    Logger.i("Success fetch photo information , Thread:%s" , Thread.currentThread().getId());
+                    try( ResponseBody responseBody = response.body() ) {
+                        String jsonString = responseBody.string();
+                        Photo photo = gson.fromJson(jsonString, Photo.class);
+                        runOnUiThread(() -> textView.setText(photo.alt_description));
+                        DownloadPhoto(photo);
+                        currentPhotoJson = jsonString;
+                    }
+                }
+            }
+        });
+        textView.setText( "Requesting..." );
+    }
+
+    private void DownloadPhoto( Photo photo )
+    {
+        Request imageRequest = new Request.Builder()
+                .url(photo.urls.small)
+                .get()
+                .build();
+        Call downloadCall = client.newCall(imageRequest);
+        downloadCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Logger.e("download image Error:%s", e.getMessage());
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                if (response.isSuccessful()) {
+                    Logger.i("Success response  photo image resource , Thread:%s" , Thread.currentThread().getId());
+                    //FileOutputStream output = null;
+                    try( ResponseBody downloadBody = response.body() ) {
+                        InputStream inputStream = downloadBody.byteStream();
+                        BufferedInputStream input = new BufferedInputStream(inputStream);
+
+                        File file = new File(getExternalCacheDir(), String.format( "%s.jpg" ,photo.id ) );
+                        try( FileOutputStream output = new FileOutputStream(file) )
+                        {
+                            int len;
+                            byte[] data  = new byte[1024];
+                            while ((len = input.read(data)) != -1) {
+                                output.write(data, 0, len);
+                            }
+                            output.flush();
+                        }
+                        Logger.i("----Success download photo image to cache---" );
+                        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+                        Logger.i("----Fetch photo image from cache---" );
+                        runOnUiThread(() -> photoView.setImageBitmap(bitmap));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 }
