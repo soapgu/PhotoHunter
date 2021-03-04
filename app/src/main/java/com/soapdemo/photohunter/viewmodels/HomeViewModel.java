@@ -35,8 +35,9 @@ import okhttp3.ResponseBody;
 public class HomeViewModel extends ObservableViewModel {
     private static final String url = "https://api.unsplash.com/photos/random?client_id=ki5iNzD7hebsr-d8qUlEJIhG5wxGwikU71nsqj8PcMM";
     private static OkHttpClient client = new OkHttpClient();
-    Timer timer;
-    Gson gson = new Gson();
+    private static Gson gson = new Gson();
+    private Timer timer;
+
     private String photoInfo = "Cow is Default Photo";
     private Bitmap bitmap;
     private int countSec = 0;
@@ -193,6 +194,7 @@ public class HomeViewModel extends ObservableViewModel {
                         setBitmap(bitmap);
                     } catch (IOException e) {
                         e.printStackTrace();
+                        //。。。
                     }
                 }
             }

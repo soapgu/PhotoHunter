@@ -14,8 +14,6 @@ import com.soapdemo.photohunter.viewmodels.HomeViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
-    ActivityMainBinding binding;
-
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         HomeViewModel viewModel = new ViewModelProvider(this,
                 ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
                 .get(HomeViewModel.class);
-        binding  = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        ActivityMainBinding binding  = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setViewmodel( viewModel );
         binding.searchButton.setOnClickListener( v -> {
             Intent intent = new Intent(this, SearchActivity.class);

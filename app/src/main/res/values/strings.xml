@@ -9,4 +9,7 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">Hello Square World!</string>
+    <string name="Start">Start</string>
+    <string name="Pause">Pause</string>
+    <string name="ActionButton">%s(%d)</string>
 </resources>
