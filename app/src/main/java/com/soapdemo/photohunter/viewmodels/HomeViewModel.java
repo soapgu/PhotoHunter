@@ -11,6 +11,7 @@ import androidx.databinding.library.baseAdapters.BR;
 
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
+import com.soapdemo.photohunter.MainActivity;
 import com.soapdemo.photohunter.R;
 import com.soapdemo.photohunter.models.Photo;
 
@@ -21,6 +22,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -32,9 +35,12 @@ import okhttp3.ResponseBody;
 public class HomeViewModel extends ObservableViewModel {
     private static final String url = "https://api.unsplash.com/photos/random?client_id=ki5iNzD7hebsr-d8qUlEJIhG5wxGwikU71nsqj8PcMM";
     private static OkHttpClient client = new OkHttpClient();
+    Timer timer;
     Gson gson = new Gson();
     private String photoInfo = "Cow is Default Photo";
     private Bitmap bitmap;
+    private int countSec = 0;
+    private boolean isCount = false;
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
@@ -61,6 +67,58 @@ public class HomeViewModel extends ObservableViewModel {
         this.bitmap = bitmap;
         this.notifyPropertyChanged(BR.bitmap);
     }
+
+    @Bindable
+    public int getCountSec() {
+        return countSec;
+    }
+
+    @Bindable
+    public boolean getIsCount() {
+        return isCount;
+    }
+
+
+    public void StartOrStop()
+    {
+        if( this.isCount )
+            this.Stop();
+        else
+            this.Start();
+    }
+
+    private void Stop()
+    {
+        if( this.isCount ) {
+            this.timer.cancel();
+            this.timer.purge();
+            this.isCount = false;
+            this.notifyPropertyChanged( BR.isCount );
+        }
+    }
+
+    private  void Start()
+    {
+        if(!this.isCount) {
+            timer = new Timer();
+            timer.schedule( new HomeViewModel.CountTask(), 0 ,1000 );
+            this.isCount = true;
+            this.notifyPropertyChanged( BR.isCount );
+        }
+    }
+
+    public class CountTask extends TimerTask {
+        @Override
+        public void run() {
+            countSec++;
+            if( countSec == 10 )
+                ChangePhoto();
+            else if( countSec > 10 )
+                countSec = 1;
+            notifyPropertyChanged(BR.countSec);
+        }
+    }
+
 
     public void ChangePhoto()
     {
