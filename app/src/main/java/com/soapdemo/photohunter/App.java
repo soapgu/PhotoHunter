@@ -2,8 +2,11 @@ package com.soapdemo.photohunter;
 
 import android.app.Application;
 import android.content.res.Configuration;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.core.os.HandlerCompat;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
@@ -11,6 +14,13 @@ import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
 public class App extends Application {
+    Handler mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
+
+    public Handler getMainThreadHandler()
+    {
+        return  mainThreadHandler;
+    }
+
     @Override
     public void onCreate() {
         FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()

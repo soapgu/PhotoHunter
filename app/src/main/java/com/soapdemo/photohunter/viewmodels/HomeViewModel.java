@@ -4,6 +4,7 @@ package com.soapdemo.photohunter.viewmodels;
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.Bindable;
@@ -11,6 +12,7 @@ import androidx.databinding.library.baseAdapters.BR;
 
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
+import com.soapdemo.photohunter.App;
 import com.soapdemo.photohunter.MainActivity;
 import com.soapdemo.photohunter.R;
 import com.soapdemo.photohunter.models.Photo;
@@ -132,8 +134,9 @@ public class HomeViewModel extends ObservableViewModel {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Logger.e("Get Photo Error:%s" , e.getMessage());
-                setPhotoInfo("Error for Hunter Photo");
+                String errorMsg = e.getMessage();
+                Logger.e("Get Photo Error:%s" , errorMsg);
+                ShowToastInfo(String.format( "Error for Hunter Photo:%s", errorMsg));
             }
 
             @Override
@@ -151,7 +154,7 @@ public class HomeViewModel extends ObservableViewModel {
                 }
             }
         });
-        setPhotoInfo("Requesting...");
+        ShowToastInfo("Requesting photo info...");
     }
 
     private void DownloadImage( Photo photo )
@@ -164,7 +167,9 @@ public class HomeViewModel extends ObservableViewModel {
         downloadCall.enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Logger.e("download image Error:%s", e.getMessage());
+                String errorMsg = e.getMessage();
+                Logger.e("download image Error:%s", errorMsg);
+                ShowToastInfo(String.format( "Error for download Photo:%s", errorMsg));
             }
 
             @Override
@@ -193,11 +198,19 @@ public class HomeViewModel extends ObservableViewModel {
                         Logger.i("----Fetch photo image from cache---" );
                         setBitmap(bitmap);
                     } catch (IOException e) {
-                        e.printStackTrace();
-                        //。。。
+                        ShowToastInfo(String.format( "Error for process Photo:%s", e.getMessage()));
                     }
                 }
             }
+        });
+    }
+
+    private void ShowToastInfo( String message )
+    {
+        App app = this.getApplication();
+        app.getMainThreadHandler().post(() -> {
+            Toast toast = Toast.makeText(app, message , Toast.LENGTH_SHORT);
+            toast.show();
         });
     }
 }
