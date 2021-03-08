@@ -16,11 +16,13 @@ import com.soapdemo.photohunter.App;
 import com.soapdemo.photohunter.MainActivity;
 import com.soapdemo.photohunter.R;
 import com.soapdemo.photohunter.models.Photo;
+import com.soapdemo.photohunter.util.HttpClientWrapper;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,8 +38,9 @@ import okhttp3.ResponseBody;
 
 public class HomeViewModel extends ObservableViewModel {
     private static final String url = "https://api.unsplash.com/photos/random?client_id=ki5iNzD7hebsr-d8qUlEJIhG5wxGwikU71nsqj8PcMM";
-    private static OkHttpClient client = new OkHttpClient();
-    private static Gson gson = new Gson();
+    //private static OkHttpClient client = new OkHttpClient();
+    //private static Gson gson = new Gson();
+    private HttpClientWrapper httpClientWrapper;
     private Timer timer;
 
     private String photoInfo = "Cow is Default Photo";
@@ -47,6 +50,7 @@ public class HomeViewModel extends ObservableViewModel {
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
+        httpClientWrapper = new HttpClientWrapper();
         Bitmap cowImage = BitmapFactory.decodeResource(this.getApplication().getResources(), R.drawable.homephoto);
         this.setBitmap(cowImage);
     }
@@ -129,6 +133,19 @@ public class HomeViewModel extends ObservableViewModel {
                 .url(url)
                 .get()
                 .build();
+        httpClientWrapper.ResponseJson( request ,
+                photo -> {
+                    setPhotoInfo(photo.alt_description);
+                    DownloadImage(photo);
+                },
+                e -> {
+                    String errorMsg = e.getMessage();
+                    Logger.e("Get Photo Error:%s" , errorMsg);
+                    ShowToastInfo(String.format( "Error for Hunter Photo:%s", errorMsg));
+                },
+                Photo.class);
+        ShowToastInfo("Requesting photo info...");
+        /*
         Call call = client.newCall(request);
 
         call.enqueue(new Callback() {
@@ -154,7 +171,7 @@ public class HomeViewModel extends ObservableViewModel {
                 }
             }
         });
-        ShowToastInfo("Requesting photo info...");
+        */
     }
 
     private void DownloadImage( Photo photo )
@@ -163,6 +180,37 @@ public class HomeViewModel extends ObservableViewModel {
                 .url(photo.urls.small)
                 .get()
                 .build();
+        httpClientWrapper.ResponseStream( imageRequest,
+                stream -> {
+                    BufferedInputStream input = new BufferedInputStream(stream);
+
+                    File file = new File( getApplication().getExternalCacheDir(), String.format( "%s.jpg" ,photo.id ) );
+                    try( FileOutputStream output = new FileOutputStream(file) )
+                    {
+                        int len;
+                        byte[] data  = new byte[1024];
+                        while ((len = input.read(data)) != -1) {
+                            output.write(data, 0, len);
+                        }
+                        output.flush();
+                        input.close();
+                    } catch (IOException e) {
+                        String errorMsg = e.getMessage();
+                        Logger.e("Download Photo Error:%s" , errorMsg);
+                        ShowToastInfo(String.format( "Error for download Photo:%s", errorMsg));
+                    }
+                    Logger.i("----Success download photo image to cache---" );
+                    Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+                    Logger.i("----Fetch photo image from cache---" );
+                    setBitmap(bitmap);
+                },
+                e -> {
+                    String errorMsg = e.getMessage();
+                    Logger.e("Download Photo Error:%s" , errorMsg);
+                    ShowToastInfo(String.format( "Error for download Photo:%s", errorMsg));
+                });
+
+        /*
         Call downloadCall = client.newCall(imageRequest);
         downloadCall.enqueue(new Callback() {
             @Override
@@ -203,6 +251,7 @@ public class HomeViewModel extends ObservableViewModel {
                 }
             }
         });
+         */
     }
 
     private void ShowToastInfo( String message )
