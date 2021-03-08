@@ -14,6 +14,29 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/photo_panel"
+            android:background="@color/black"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/msg_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/photo_view"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:contentDescription="@string/image_desc"
+                android:scaleType="fitCenter"
+                app:imageBitmap="@{viewmodel.bitmap}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <TextView
             android:id="@+id/msg_view"
             android:layout_width="wrap_content"
@@ -26,24 +49,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/constraintLayout" />
 
-        <ImageView
-            android:id="@+id/photo_view"
-            app:imageBitmap="@{viewmodel.bitmap}"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:contentDescription="@string/image_desc"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toTopOf="@+id/msg_view"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/constraintLayout"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="180dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/photo_view"
+            app:layout_constraintEnd_toStartOf="@+id/photo_panel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0">
@@ -61,10 +72,10 @@
 
             <Button
                 android:id="@+id/timer_button"
-                android:onClick="@{()->viewmodel.StartOrStop()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
+                android:onClick="@{()->viewmodel.StartOrStop()}"
                 android:text="@{@string/ActionButton( viewmodel.IsCount ? @string/Pause : @string/Start , viewmodel.countSec)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

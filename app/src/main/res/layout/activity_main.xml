@@ -22,23 +22,33 @@
             android:layout_marginBottom="10dp"
             android:text="@{viewmodel.photoInfo}"
             android:textSize="24sp"
-            app:layout_constraintBottom_toTopOf="@+id/photo_view"
+            app:layout_constraintBottom_toTopOf="@+id/photo_panel"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/photo_view"
-            app:imageBitmap="@{viewmodel.bitmap}"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@color/black"
+            android:id="@+id/photo_panel"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:contentDescription="@string/image_desc"
-            android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/panel_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/msg_view" />
+            app:layout_constraintTop_toBottomOf="@id/msg_view">
+
+            <ImageView
+                android:id="@+id/photo_view"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:contentDescription="@string/image_desc"
+                android:scaleType="fitCenter"
+                app:imageBitmap="@{viewmodel.bitmap}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/panel_button"
@@ -53,7 +63,7 @@
                 android:id="@+id/new_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="30dp"
                 android:onClick="@{()->viewmodel.ChangePhoto()}"
                 android:text="@string/new_button_text"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -64,7 +74,7 @@
                 android:id="@+id/timer_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="30dp"
                 android:onClick="@{()->viewmodel.StartOrStop()}"
                 android:text="@{@string/ActionButton( viewmodel.IsCount ? @string/Pause : @string/Start , viewmodel.countSec)}"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -75,7 +85,7 @@
                 android:id="@+id/search_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="30dp"
                 android:text="@string/Search"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/new_button"
