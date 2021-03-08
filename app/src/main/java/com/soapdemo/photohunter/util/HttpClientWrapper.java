@@ -19,11 +19,11 @@ public class HttpClientWrapper {
 
     /**
      * 处理返回json内容Response
-     * @param request
-     * @param onSuccess
-     * @param onError
-     * @param classOfT
-     * @param <T>
+     * @param request 请求对象
+     * @param onSuccess 成功返回json回调
+     * @param onError 失败回调
+     * @param classOfT json类型
+     * @param <T> json类型泛型
      */
     public <T> void ResponseJson(Request request , HttpJsonCallback<T> onSuccess , HttpErrorCallback onError, Class<T> classOfT)
     {
@@ -63,9 +63,9 @@ public class HttpClientWrapper {
 
     /**
      * 处理返回Stream内容
-     * @param request
-     * @param onSuccess
-     * @param onError
+     * @param request 请求对象
+     * @param onSuccess 成功返回body的stream回调
+     * @param onError 失败回调
      */
     public void ResponseStream(Request request ,  HttpInputStreamCallback onSuccess , HttpErrorCallback onError)
     {
