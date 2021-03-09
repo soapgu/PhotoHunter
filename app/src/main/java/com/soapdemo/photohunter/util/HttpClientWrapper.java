@@ -1,11 +1,14 @@
 package com.soapdemo.photohunter.util;
 
+import androidx.core.util.Consumer;
+
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -25,13 +28,13 @@ public class HttpClientWrapper {
      * @param classOfT json类型
      * @param <T> json类型泛型
      */
-    public <T> void ResponseJson(Request request , HttpJsonCallback<T> onSuccess , HttpErrorCallback onError, Class<T> classOfT)
+    public <T> void ResponseJson(Request request , Consumer<T> onSuccess , Consumer<Exception> onError, Class<T> classOfT)
     {
         Call call = client.newCall(request);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                onError.OnError( e );
+                onError.accept( e );
             }
 
             @Override
@@ -40,22 +43,23 @@ public class HttpClientWrapper {
                 {
                     if( response.isSuccessful() ) {
                         try {
+                            assert body != null;
                             String json = body.string();
                             Gson gson = new Gson();
                             T jsonObj = gson.fromJson(json,classOfT );
-                            onSuccess.onResponse(jsonObj);
+                            onSuccess.accept(jsonObj);
                         } catch (Exception e) {
-                            onError.OnError(e);
+                            onError.accept(e);
                         }
                     }
                     else
                     {
-                        onError.OnError( new Exception( String.format( "error state code: %s", response.code() ) ) );
+                        onError.accept( new Exception( String.format( "error state code: %s", response.code() ) ) );
                     }
                 }
                 catch ( Exception e )
                 {
-                    onError.OnError(e);
+                    onError.accept(e);
                 }
             }
         });
@@ -67,13 +71,13 @@ public class HttpClientWrapper {
      * @param onSuccess 成功返回body的stream回调
      * @param onError 失败回调
      */
-    public void ResponseStream(Request request ,  HttpInputStreamCallback onSuccess , HttpErrorCallback onError)
+    public void ResponseStream(Request request ,  Consumer<InputStream> onSuccess , Consumer<Exception> onError)
     {
         Call call = client.newCall(request);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                onError.OnError( e );
+                onError.accept( e );
             }
 
             @Override
@@ -81,17 +85,17 @@ public class HttpClientWrapper {
                 try (ResponseBody body = response.body())
                 {
                     if( response.isSuccessful() ) {
-                        InputStream stream = response.body().byteStream();
-                        onSuccess.onResponse(stream);
+                        InputStream stream = Objects.requireNonNull(response.body()).byteStream();
+                        onSuccess.accept(stream);
                     }
                     else
                     {
-                        onError.OnError( new Exception( String.format( "error state code: %s", response.code() ) ) );
+                        onError.accept( new Exception( String.format( "error state code: %s", response.code() ) ) );
                     }
                 }
                 catch ( Exception e )
                 {
-                    onError.OnError(e);
+                    onError.accept(e);
                 }
             }
         });
