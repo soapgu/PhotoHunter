@@ -85,7 +85,8 @@ public class HttpClientWrapper {
                 try (ResponseBody body = response.body())
                 {
                     if( response.isSuccessful() ) {
-                        InputStream stream = Objects.requireNonNull(response.body()).byteStream();
+                        assert body != null;
+                        InputStream stream = body.byteStream();
                         onSuccess.accept(stream);
                     }
                     else
