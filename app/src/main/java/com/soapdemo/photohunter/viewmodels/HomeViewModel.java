@@ -38,8 +38,6 @@ import okhttp3.ResponseBody;
 
 public class HomeViewModel extends ObservableViewModel {
     private static final String url = "https://api.unsplash.com/photos/random?client_id=ki5iNzD7hebsr-d8qUlEJIhG5wxGwikU71nsqj8PcMM";
-    //private static OkHttpClient client = new OkHttpClient();
-    //private static Gson gson = new Gson();
     private HttpClientWrapper httpClientWrapper;
     private Timer timer;
 
@@ -145,33 +143,6 @@ public class HomeViewModel extends ObservableViewModel {
                 },
                 Photo.class);
         ShowToastInfo("Requesting photo info...");
-        /*
-        Call call = client.newCall(request);
-
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                String errorMsg = e.getMessage();
-                Logger.e("Get Photo Error:%s" , errorMsg);
-                ShowToastInfo(String.format( "Error for Hunter Photo:%s", errorMsg));
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                Logger.i("Response Code:%s",response.code());
-                if( response.isSuccessful() ) {
-                    Logger.i("Success fetch photo information , Thread:%s" , Thread.currentThread().getId());
-                    try( ResponseBody responseBody = response.body() ) {
-                        assert responseBody != null;
-                        String jsonString = responseBody.string();
-                        Photo photo = gson.fromJson(jsonString, Photo.class);
-                        setPhotoInfo(photo.alt_description);
-                        DownloadImage(photo);
-                    }
-                }
-            }
-        });
-        */
     }
 
     private void DownloadImage( Photo photo )
@@ -209,49 +180,6 @@ public class HomeViewModel extends ObservableViewModel {
                     Logger.e("Download Photo Error:%s" , errorMsg);
                     ShowToastInfo(String.format( "Error for download Photo:%s", errorMsg));
                 });
-
-        /*
-        Call downloadCall = client.newCall(imageRequest);
-        downloadCall.enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                String errorMsg = e.getMessage();
-                Logger.e("download image Error:%s", errorMsg);
-                ShowToastInfo(String.format( "Error for download Photo:%s", errorMsg));
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
-                if (response.isSuccessful()) {
-                    Logger.i("Success response  photo image resource , Thread:%s" , Thread.currentThread().getId());
-                    //FileOutputStream output = null;
-                    try( ResponseBody downloadBody = response.body() ) {
-                        assert downloadBody != null;
-                        InputStream inputStream = downloadBody.byteStream();
-                        BufferedInputStream input = new BufferedInputStream(inputStream);
-
-                        File file = new File( getApplication().getExternalCacheDir(), String.format( "%s.jpg" ,photo.id ) );
-                        try( FileOutputStream output = new FileOutputStream(file) )
-                        {
-                            int len;
-                            byte[] data  = new byte[1024];
-                            while ((len = input.read(data)) != -1) {
-                                output.write(data, 0, len);
-                            }
-                            output.flush();
-                            input.close();
-                        }
-                        Logger.i("----Success download photo image to cache---" );
-                        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
-                        Logger.i("----Fetch photo image from cache---" );
-                        setBitmap(bitmap);
-                    } catch (IOException e) {
-                        ShowToastInfo(String.format( "Error for process Photo:%s", e.getMessage()));
-                    }
-                }
-            }
-        });
-         */
     }
 
     private void ShowToastInfo( String message )
