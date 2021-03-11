@@ -27,14 +27,7 @@ import androidx.lifecycle.ViewModel;
         callbacks.remove(callback);
     }
 
-    /**
-     * Notifies observers that all properties of this instance have changed.
-     */
-    void notifyChange() {
-        callbacks.notifyCallbacks(this, 0, null);
-    }
-
-    /**
+     /**
      * Notifies observers that a specific property has changed. The getter for the
      * property that changes should be marked with the @Bindable annotation to
      * generate a field in the BR class to be used as the fieldId parameter.
