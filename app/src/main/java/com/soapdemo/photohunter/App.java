@@ -14,7 +14,9 @@ import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
 public class App extends Application {
-    Handler mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
+    final Handler mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
+    final Thread.UncaughtExceptionHandler defaultUncaughtExceptionHandler =
+            Thread.getDefaultUncaughtExceptionHandler();
 
     public Handler getMainThreadHandler()
     {
@@ -30,6 +32,12 @@ public class App extends Application {
         Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
         Logger.i("-------APP Create-------");
         super.onCreate();
+        Thread.setDefaultUncaughtExceptionHandler((paramThread, paramThrowable) -> {
+            Logger.e( paramThrowable, "----------UncaughtException throw---------" );
+            if( defaultUncaughtExceptionHandler != null ){
+                defaultUncaughtExceptionHandler.uncaughtException( paramThread,paramThrowable );
+            }
+        });
     }
 
     @Override
