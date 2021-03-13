@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="datacontext"
+            type="com.soapdemo.photohunter.viewmodels.SearchViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,6 +25,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/data_list"
+            app:itemsSource="@{datacontext.stringItems}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="100dp"
