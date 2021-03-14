@@ -6,18 +6,21 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.soapdemo.photohunter.R;
-import com.soapdemo.photohunter.databinding.TextRowItemBinding;
+import com.soapdemo.photohunter.util.ItemTemplate;
 
 import java.util.List;
 
 public class CustomAdapter<T> extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
     private List<T> mDataSet;
+    private ItemTemplate itemTemplate;
 
-    public CustomAdapter(List<T> dataSet) {
+    public CustomAdapter(List<T> dataSet , ItemTemplate itemTemplate) {
         mDataSet = dataSet;
+        this.itemTemplate = itemTemplate;
+        //int aaa = com.soapdemo.photohunter.BR.content;
     }
 
     @NonNull
@@ -26,15 +29,16 @@ public class CustomAdapter<T> extends RecyclerView.Adapter<CustomAdapter.ViewHol
         // Create a new view, which defines the UI of the list item
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
                 //.inflate(R.layout.text_row_item, parent, false);
-        TextRowItemBinding binding  = DataBindingUtil.inflate(inflater,R.layout.text_row_item,parent, false );
+        ViewDataBinding binding  = DataBindingUtil.inflate(inflater,itemTemplate.getTemplateId(),parent, false );
         return new ViewHolder(binding.getRoot());
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TextRowItemBinding binding = DataBindingUtil.getBinding(holder.itemView);
+        ViewDataBinding binding = DataBindingUtil.getBinding(holder.itemView);
         assert binding != null;
-        binding.setContent(  (String)this.mDataSet.get(position));
+        //binding.setContent(  (String)this.mDataSet.get(position));
+        binding.setVariable( this.itemTemplate.getVariableId(), this.mDataSet.get(position) );
         binding.executePendingBindings();
     }
 

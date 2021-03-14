@@ -16,9 +16,10 @@ public class BindingAdapters {
         iv.setImageBitmap(bitmap);
     }
 
-    @BindingAdapter("itemsSource")
-    public static <T> void setItems(RecyclerView recyclerView , List<T> items  ){
-        CustomAdapter<T> adapter = new CustomAdapter<>( items );
+    @BindingAdapter({"itemsSource","itemTemplate"})
+    public static <T> void setItems(RecyclerView recyclerView , List<T> itemsSource , ItemTemplate itemTemplate ){
+        //ItemTemplate itemTemplate = ItemTemplate.of( BR.content, @layout/text_row_item)
+        CustomAdapter<T> adapter = new CustomAdapter<>( itemsSource,itemTemplate);
         recyclerView.setAdapter( adapter );
     }
 
