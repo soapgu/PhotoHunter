@@ -13,7 +13,7 @@ import java.util.List;
 public class SearchViewModel extends ObservableViewModel {
     public SearchViewModel(@NonNull Application application) {
         super(application);
-        this.setStringItems(new ArrayList<>(Arrays.asList("AAA", "BBB", "CCC", "DDD", "EEE", "FFF")));
+        this.setStringItems(new ArrayList<>(Arrays.asList("AAA", "BBB", "CCC", "DDD", "EEE", "FFF","G","H","I","J","K")));
     }
 
     private List<String> stringItems;

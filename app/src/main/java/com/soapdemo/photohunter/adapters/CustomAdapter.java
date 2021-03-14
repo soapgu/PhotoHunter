@@ -11,10 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.soapdemo.photohunter.R;
 import com.soapdemo.photohunter.databinding.TextRowItemBinding;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
-    private String[] mDataSet;
+import java.util.List;
 
-    public CustomAdapter(String[] dataSet) {
+public class CustomAdapter<T> extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
+    private List<T> mDataSet;
+
+    public CustomAdapter(List<T> dataSet) {
         mDataSet = dataSet;
     }
 
@@ -31,13 +33,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TextRowItemBinding binding = DataBindingUtil.getBinding(holder.itemView);
-        binding.setContent(  this.mDataSet[position] );
+        assert binding != null;
+        binding.setContent(  (String)this.mDataSet.get(position));
         binding.executePendingBindings();
     }
 
     @Override
     public int getItemCount() {
-        return this.mDataSet.length;
+        return this.mDataSet.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

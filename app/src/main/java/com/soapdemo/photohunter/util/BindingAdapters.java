@@ -17,8 +17,8 @@ public class BindingAdapters {
     }
 
     @BindingAdapter("itemsSource")
-    public static void setItems(RecyclerView recyclerView , List<String> items ){
-        CustomAdapter adapter = new CustomAdapter( items.toArray( new String[0]) );
+    public static <T> void setItems(RecyclerView recyclerView , List<T> items  ){
+        CustomAdapter<T> adapter = new CustomAdapter<>( items );
         recyclerView.setAdapter( adapter );
     }
 

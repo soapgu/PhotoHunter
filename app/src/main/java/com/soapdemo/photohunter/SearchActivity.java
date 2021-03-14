@@ -23,9 +23,5 @@ public class SearchActivity extends AppCompatActivity {
         ActivitySearchBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_search);
         binding.dataList.setLayoutManager( new LinearLayoutManager( this ) );
         binding.setDatacontext( viewModel );
-        /*
-        CustomAdapter adapter = new CustomAdapter( new String[]{"A","B","C","E","F"} );
-        binding.dataList.setAdapter( adapter );
-         */
     }
 }
