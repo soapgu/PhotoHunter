@@ -2,6 +2,10 @@ package com.soapdemo.photohunter.util;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.databinding.library.baseAdapters.BR;
+
+import com.orhanobut.logger.Logger;
+
 
 public class ItemTemplate {
     private int variableId;
@@ -9,7 +13,19 @@ public class ItemTemplate {
     private int templateId;
 
     @NonNull
-    public static ItemTemplate of(int variableId, @LayoutRes int templateId) {
+    public static ItemTemplate of( @LayoutRes int templateId , String variableName){
+        int variableId = BR.datacontext;
+        try {
+            variableId = BR.class.getField(variableName).getInt(BR.class);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            Logger.e( e, "Error variableName parse" );
+        }
+        return new ItemTemplate(variableId, templateId);
+    }
+
+    @NonNull
+    public static ItemTemplate of( @LayoutRes int templateId ){
+        int variableId = BR.datacontext;
         return new ItemTemplate(variableId, templateId);
     }
 

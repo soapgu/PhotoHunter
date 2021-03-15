@@ -28,7 +28,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/data_list"
             app:itemsSource="@{datacontext.stringItems}"
-            app:itemTemplate="@{ItemTemplate.of(3,@layout/text_row_item)}"
+            app:itemTemplate='@{ItemTemplate.of(@layout/text_row_item)}'
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="100dp"

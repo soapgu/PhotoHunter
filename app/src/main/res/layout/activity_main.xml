@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="viewmodel"
+            name="datacontext"
             type="com.soapdemo.photohunter.viewmodels.HomeViewModel" />
     </data>
 
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="@{viewmodel.photoInfo}"
+            android:text="@{datacontext.photoInfo}"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/photo_panel"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -43,7 +43,7 @@
                 android:layout_height="0dp"
                 android:contentDescription="@string/image_desc"
                 android:scaleType="fitCenter"
-                app:imageBitmap="@{viewmodel.bitmap}"
+                app:imageBitmap="@{datacontext.bitmap}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:onClick="@{()->viewmodel.ChangePhoto()}"
+                android:onClick="@{()->datacontext.ChangePhoto()}"
                 android:text="@string/new_button_text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/timer_button"
@@ -75,8 +75,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:onClick="@{()->viewmodel.StartOrStop()}"
-                android:text="@{@string/ActionButton( viewmodel.IsCount ? @string/Pause : @string/Start , viewmodel.countSec)}"
+                android:onClick="@{()->datacontext.StartOrStop()}"
+                android:text="@{@string/ActionButton( datacontext.IsCount ? @string/Pause : @string/Start , datacontext.countSec)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

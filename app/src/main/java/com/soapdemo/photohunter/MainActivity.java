@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
                 ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
                 .get(HomeViewModel.class);
         ActivityMainBinding binding  = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        binding.setViewmodel( viewModel );
+        binding.setDatacontext( viewModel );
         binding.searchButton.setOnClickListener( v -> {
             Intent intent = new Intent(this, SearchActivity.class);
             startActivity(intent);
