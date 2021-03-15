@@ -7,9 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
 
-import com.soapdemo.photohunter.adapters.CustomAdapter;
 import com.soapdemo.photohunter.databinding.ActivitySearchBinding;
-import com.soapdemo.photohunter.viewmodels.HomeViewModel;
 import com.soapdemo.photohunter.viewmodels.SearchViewModel;
 
 public class SearchActivity extends AppCompatActivity {

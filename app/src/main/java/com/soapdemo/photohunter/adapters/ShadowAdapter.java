@@ -13,11 +13,11 @@ import com.soapdemo.photohunter.util.ItemTemplate;
 
 import java.util.List;
 
-public class CustomAdapter<T> extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
+public class ShadowAdapter<T> extends RecyclerView.Adapter<ShadowAdapter.ViewHolder> {
     private List<T> mDataSet;
     private ItemTemplate itemTemplate;
 
-    public CustomAdapter(List<T> dataSet , ItemTemplate itemTemplate) {
+    public ShadowAdapter(List<T> dataSet , ItemTemplate itemTemplate) {
         mDataSet = dataSet;
         this.itemTemplate = itemTemplate;
         //int aaa = com.soapdemo.photohunter.BR.content;

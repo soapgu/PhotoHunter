@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.soapdemo.photohunter.adapters.CustomAdapter;
+import com.soapdemo.photohunter.adapters.ShadowAdapter;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class BindingAdapters {
     @BindingAdapter({"itemsSource","itemTemplate"})
     public static <T> void setItems(RecyclerView recyclerView , List<T> itemsSource , ItemTemplate itemTemplate ){
         //ItemTemplate itemTemplate = ItemTemplate.of( BR.content, @layout/text_row_item)
-        CustomAdapter<T> adapter = new CustomAdapter<>( itemsSource,itemTemplate);
+        ShadowAdapter<T> adapter = new ShadowAdapter<>( itemsSource,itemTemplate);
         recyclerView.setAdapter( adapter );
     }
 
