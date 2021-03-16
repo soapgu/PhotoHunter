@@ -15,17 +15,13 @@ public class ItemTemplate {
     @NonNull
     public static ItemTemplate of( @LayoutRes int templateId , String variableName){
         int variableId = BR.datacontext;
-        try {
-            variableId = BR.class.getField(variableName).getInt(BR.class);
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-            Logger.e( e, "Error variableName parse" );
+        if( variableName != null ) {
+            try {
+                variableId = BR.class.getField(variableName).getInt(BR.class);
+            } catch (IllegalAccessException | NoSuchFieldException e) {
+                Logger.e(e, "Error variableName parse");
+            }
         }
-        return new ItemTemplate(variableId, templateId);
-    }
-
-    @NonNull
-    public static ItemTemplate of( @LayoutRes int templateId ){
-        int variableId = BR.datacontext;
         return new ItemTemplate(variableId, templateId);
     }
 

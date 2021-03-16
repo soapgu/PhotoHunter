@@ -6,9 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.databinding.Observable;
 import androidx.databinding.PropertyChangeRegistry;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.ViewModel;
 
- class ObservableViewModel extends AndroidViewModel implements Observable {
+class ObservableViewModel extends AndroidViewModel implements Observable {
     private PropertyChangeRegistry callbacks = new PropertyChangeRegistry();
 
      public ObservableViewModel(@NonNull Application application) {

@@ -12,4 +12,5 @@
     <string name="Start">Start</string>
     <string name="Pause">Pause</string>
     <string name="ActionButton">%s(%d)</string>
+    <string name="clear_text">clear</string>
 </resources>

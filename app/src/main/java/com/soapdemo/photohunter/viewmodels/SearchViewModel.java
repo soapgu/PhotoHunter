@@ -4,27 +4,39 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.Bindable;
+import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ObservableList;
 import androidx.databinding.library.baseAdapters.BR;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class SearchViewModel extends ObservableViewModel {
+
+    private int court = 0;
     public SearchViewModel(@NonNull Application application) {
         super(application);
-        this.setStringItems(new ArrayList<>(Arrays.asList("AAA", "BBB", "CCC", "DDD", "EEE", "FFF","G","H","I","J","K")));
+        ObservableList<String> ol = new ObservableArrayList<>();
+        this.setStringItems( ol );
     }
 
-    private List<String> stringItems;
+    private ObservableList<String> stringItems;
 
     @Bindable
-    public List<String> getStringItems() {
+    public ObservableList<String> getStringItems() {
         return this.stringItems;
     }
 
-    public void setStringItems(List<String> stringItems) {
+    public void setStringItems(ObservableList<String> stringItems) {
         this.stringItems = stringItems;
         this.notifyPropertyChanged(BR.stringItems);
+    }
+
+    public void AddNewItem()
+    {
+        this.court++;
+        this.getStringItems().add(String.valueOf(this.court));
+    }
+
+    public void Clear()
+    {
+        this.getStringItems().clear();
     }
 }

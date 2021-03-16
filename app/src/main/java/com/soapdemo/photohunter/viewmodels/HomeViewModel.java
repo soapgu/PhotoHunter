@@ -10,35 +10,24 @@ import androidx.annotation.NonNull;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 
-import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.soapdemo.photohunter.App;
-import com.soapdemo.photohunter.MainActivity;
 import com.soapdemo.photohunter.R;
 import com.soapdemo.photohunter.models.Photo;
 import com.soapdemo.photohunter.util.HttpClientWrapper;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class HomeViewModel extends ObservableViewModel {
     private static final String url = "https://api.unsplash.com/photos/random?client_id=ki5iNzD7hebsr-d8qUlEJIhG5wxGwikU71nsqj8PcMM";
-    private HttpClientWrapper httpClientWrapper;
+    private final HttpClientWrapper httpClientWrapper;
     private Timer timer;
 
     private String photoInfo = "Cow is Default Photo";
