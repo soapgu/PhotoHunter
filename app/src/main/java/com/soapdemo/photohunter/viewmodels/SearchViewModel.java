@@ -17,26 +17,26 @@ public class SearchViewModel extends ObservableViewModel {
         this.setStringItems( ol );
     }
 
-    private ObservableList<String> stringItems;
+    private ObservableList<String> photoItems;
 
     @Bindable
-    public ObservableList<String> getStringItems() {
-        return this.stringItems;
+    public ObservableList<String> getPhotoItems() {
+        return this.photoItems;
     }
 
     public void setStringItems(ObservableList<String> stringItems) {
-        this.stringItems = stringItems;
-        this.notifyPropertyChanged(BR.stringItems);
+        this.photoItems = stringItems;
+        this.notifyPropertyChanged(BR.photoItems);
     }
 
     public void AddNewItem()
     {
         this.court++;
-        this.getStringItems().add(String.valueOf(this.court));
+        this.getPhotoItems().add(String.valueOf(this.court));
     }
 
     public void Clear()
     {
-        this.getStringItems().clear();
+        this.getPhotoItems().clear();
     }
 }
