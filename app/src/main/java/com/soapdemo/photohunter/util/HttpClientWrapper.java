@@ -17,7 +17,27 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class HttpClientWrapper {
-    private static OkHttpClient client = new OkHttpClient();
+
+    private static volatile HttpClientWrapper instance;
+    private  OkHttpClient client;
+
+
+    private HttpClientWrapper()
+    {
+        client = new OkHttpClient();
+    }
+
+    public static HttpClientWrapper getInstance()
+    {
+        if( instance == null ) {
+            synchronized (HttpClientWrapper.class) {
+                if( instance == null ){
+                    instance = new HttpClientWrapper();
+                }
+            }
+        }
+        return instance;
+    }
 
     /**
      * 处理返回json内容Response

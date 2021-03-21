@@ -27,7 +27,6 @@ import okhttp3.Request;
 
 public class HomeViewModel extends ObservableViewModel {
     private static final String url = "https://api.unsplash.com/photos/random?client_id=ki5iNzD7hebsr-d8qUlEJIhG5wxGwikU71nsqj8PcMM";
-    private final HttpClientWrapper httpClientWrapper;
     private Timer timer;
 
     private String photoInfo = "Cow is Default Photo";
@@ -37,7 +36,6 @@ public class HomeViewModel extends ObservableViewModel {
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
-        httpClientWrapper = new HttpClientWrapper();
         Bitmap cowImage = BitmapFactory.decodeResource(this.getApplication().getResources(), R.drawable.homephoto);
         this.setBitmap(cowImage);
     }
@@ -120,7 +118,7 @@ public class HomeViewModel extends ObservableViewModel {
                 .url(url)
                 .get()
                 .build();
-        httpClientWrapper.ResponseJson( request ,
+        HttpClientWrapper.getInstance().ResponseJson( request ,
                 photo -> {
                     setPhotoInfo(photo.alt_description);
                     DownloadImage(photo);
@@ -140,7 +138,7 @@ public class HomeViewModel extends ObservableViewModel {
                 .url(photo.urls.small)
                 .get()
                 .build();
-        httpClientWrapper.ResponseStream( imageRequest,
+        HttpClientWrapper.getInstance().ResponseStream( imageRequest,
                 stream -> {
                     BufferedInputStream input = new BufferedInputStream(stream);
 
