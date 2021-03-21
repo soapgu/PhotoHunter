@@ -8,23 +8,25 @@ import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableList;
 import androidx.databinding.library.baseAdapters.BR;
 
+import com.soapdemo.photohunter.models.Photo;
+
 public class SearchViewModel extends ObservableViewModel {
 
     private int court = 0;
     public SearchViewModel(@NonNull Application application) {
         super(application);
-        ObservableList<String> ol = new ObservableArrayList<>();
+        ObservableList<Photo> ol = new ObservableArrayList<>();
         this.setStringItems( ol );
     }
 
-    private ObservableList<String> photoItems;
+    private ObservableList<Photo> photoItems;
 
     @Bindable
-    public ObservableList<String> getPhotoItems() {
+    public ObservableList<Photo> getPhotoItems() {
         return this.photoItems;
     }
 
-    public void setStringItems(ObservableList<String> stringItems) {
+    public void setStringItems(ObservableList<Photo> stringItems) {
         this.photoItems = stringItems;
         this.notifyPropertyChanged(BR.photoItems);
     }
@@ -32,7 +34,9 @@ public class SearchViewModel extends ObservableViewModel {
     public void AddNewItem()
     {
         this.court++;
-        this.getPhotoItems().add(String.valueOf(this.court));
+        Photo photo = new Photo();
+        photo.alt_description = String.valueOf(this.court);
+        this.getPhotoItems().add( photo );
     }
 
     public void Clear()
