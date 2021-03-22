@@ -14,7 +14,9 @@ import com.orhanobut.logger.Logger;
 import com.soapdemo.photohunter.App;
 import com.soapdemo.photohunter.R;
 import com.soapdemo.photohunter.models.Photo;
+import com.soapdemo.photohunter.util.Execute;
 import com.soapdemo.photohunter.util.HttpClientWrapper;
+import com.soapdemo.photohunter.util.MessageHelper;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -169,12 +171,7 @@ public class HomeViewModel extends ObservableViewModel {
                 });
     }
 
-    private void ShowToastInfo( String message )
-    {
-        App app = this.getApplication();
-        app.getMainThreadHandler().post(() -> {
-            Toast toast = Toast.makeText(app, message , Toast.LENGTH_SHORT);
-            toast.show();
-        });
+    private void ShowToastInfo( String message ) {
+        MessageHelper.ShowToast( this.getApplication(),message);
     }
 }

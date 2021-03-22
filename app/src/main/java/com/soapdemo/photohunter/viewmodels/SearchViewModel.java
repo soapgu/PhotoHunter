@@ -10,9 +10,10 @@ import androidx.databinding.library.baseAdapters.BR;
 
 import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
-import com.soapdemo.photohunter.App;
 import com.soapdemo.photohunter.models.Photo;
+import com.soapdemo.photohunter.util.Execute;
 import com.soapdemo.photohunter.util.HttpClientWrapper;
+import com.soapdemo.photohunter.util.MessageHelper;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -59,14 +60,17 @@ public class SearchViewModel extends ObservableViewModel {
                 .get()
                 .build();
         HttpClientWrapper.getInstance().<List<Photo>>ResponseGenericJson( request ,
-                list -> {
-                    App app = this.getApplication();
-                    app.getMainThreadHandler().post( ()-> this.getPhotoItems().addAll(list));
-                },
+                list -> Execute.getInstance().BeginOnUIThread( ()-> this.getPhotoItems().addAll(list)),
                 e -> {
-                    String errorMsg = e.getMessage();
-                    Logger.e("Get Photo Error:%s" , errorMsg);
+                    String errorMsg = String.format("Get Photo List Error:%s" , e.getMessage() );
+                    Logger.e( e, "Get Photo List Error" );
+                    this.ShowToastInfo( errorMsg);
                 },
                 jsonType);
+        this.ShowToastInfo( "get photo list...");
+    }
+
+    private void ShowToastInfo( String message ) {
+        MessageHelper.ShowToast( this.getApplication(),message);
     }
 }
