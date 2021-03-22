@@ -49,36 +49,39 @@
 
             <Button
                 android:id="@+id/button_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:onClick="@{()->datacontext.Clear()}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:text="@string/clear_text"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/button_add"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/button_add"
-                android:onClick="@{()->datacontext.AddNewItem()}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:text="@string/new_button_text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/button_list"
-                android:onClick="@{()->datacontext.SearchPhotos()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="10dp"
+                android:onClick="@{()->datacontext.SearchPhotos()}"
                 android:text="@string/Search"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/button_clear"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/editTextTextPersonName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/button_list"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@={datacontext.searchKey}"
+                android:importantForAutofill="no"
+                tools:ignore="LabelFor" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
