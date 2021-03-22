@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -66,6 +67,50 @@ public class HttpClientWrapper {
                             String json = body.string();
                             Gson gson = new Gson();
                             T jsonObj = gson.fromJson(json,classOfT );
+                            onSuccess.accept(jsonObj);
+                        } catch (Exception e) {
+                            onError.accept(e);
+                        }
+                    }
+                    else
+                    {
+                        onError.accept( new Exception( String.format( "error state code: %s", response.code() ) ) );
+                    }
+                }
+                catch ( Exception e )
+                {
+                    onError.accept(e);
+                }
+            }
+        });
+    }
+
+    /***
+     * 获取动态泛型json类型的Response内容
+     * @param request 请求对象
+     * @param onSuccess 成功处理
+     * @param onError 失败处理
+     * @param type 类型源，从com.google.gson.reflect.TypeToken获取
+     * @param <T> json类型泛型
+     */
+    public <T> void ResponseGenericJson(Request request , Consumer<T> onSuccess , Consumer<Exception> onError, Type type) {
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                onError.accept( e );
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                try (ResponseBody body = response.body())
+                {
+                    if( response.isSuccessful() ) {
+                        try {
+                            assert body != null;
+                            String json = body.string();
+                            Gson gson = new Gson();
+                            T jsonObj = gson.fromJson(json,type );
                             onSuccess.accept(jsonObj);
                         } catch (Exception e) {
                             onError.accept(e);
