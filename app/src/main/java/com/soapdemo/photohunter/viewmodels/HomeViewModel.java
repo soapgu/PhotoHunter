@@ -4,17 +4,14 @@ package com.soapdemo.photohunter.viewmodels;
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 
 import com.orhanobut.logger.Logger;
-import com.soapdemo.photohunter.App;
 import com.soapdemo.photohunter.R;
 import com.soapdemo.photohunter.models.Photo;
-import com.soapdemo.photohunter.util.Execute;
 import com.soapdemo.photohunter.util.HttpClientWrapper;
 import com.soapdemo.photohunter.util.MessageHelper;
 
@@ -143,7 +140,6 @@ public class HomeViewModel extends ObservableViewModel {
         HttpClientWrapper.getInstance().ResponseStream( imageRequest,
                 stream -> {
                     BufferedInputStream input = new BufferedInputStream(stream);
-
                     File file = new File( getApplication().getExternalCacheDir(), String.format( "%s.jpg" ,photo.id ) );
                     try( FileOutputStream output = new FileOutputStream(file) )
                     {
